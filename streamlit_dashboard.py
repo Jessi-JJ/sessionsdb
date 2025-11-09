@@ -57,38 +57,6 @@ try:
     df['segment'] = df['sessionTags'].apply(lambda x: x.get('segment', 'Unknown'))
     df['category'] = df['sessionTags'].apply(lambda x: x.get('category', 'Unknown'))
     
-    # Sidebar filters
-    st.sidebar.header("Filters")
-    
-    # Date range filter
-    date_range = st.sidebar.date_input(
-        "Date Range",
-        value=(df['startTime'].min().date(), df['startTime'].max().date())
-    )
-    
-    # Device filter
-    devices = st.sidebar.multiselect(
-        "Device Type",
-        options=df['device'].unique(),
-        default=df['device'].unique()
-    )
-    
-    # Session type filter
-    session_types = st.sidebar.multiselect(
-        "Session Type",
-        options=df['session_type'].unique(),
-        default=df['session_type'].unique()
-    )
-
-    # Download button
-    st.sidebar.markdown('---')
-    csv = filtered_df.to_csv(index=False)
-    st.sidebar.download_button(
-        label="Download Filtered Data as CSV",
-        data=csv,
-        file_name="session_data.csv",
-        mime="text/csv"
-    )
     
     # Apply filters
     filtered_df = df[
@@ -225,6 +193,38 @@ try:
         hide_index=True
         )
     
+     # Sidebar filters
+    st.sidebar.header("Filters")
+    
+    # Date range filter
+    date_range = st.sidebar.date_input(
+        "Date Range",
+        value=(df['startTime'].min().date(), df['startTime'].max().date())
+    )
+    
+    # Device filter
+    devices = st.sidebar.multiselect(
+        "Device Type",
+        options=df['device'].unique(),
+        default=df['device'].unique()
+    )
+    
+    # Session type filter
+    session_types = st.sidebar.multiselect(
+        "Session Type",
+        options=df['session_type'].unique(),
+        default=df['session_type'].unique()
+    )
+
+    # Download button
+    st.sidebar.markdown('---')
+    csv = filtered_df.to_csv(index=False)
+    st.sidebar.download_button(
+        label="Download Filtered Data as CSV",
+        data=csv,
+        file_name="session_data.csv",
+        mime="text/csv"
+    ) 
 
 except Exception as e:
     st.error(f"Error connecting to database: {str(e)}")

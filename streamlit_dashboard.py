@@ -57,14 +57,7 @@ try:
     df['segment'] = df['sessionTags'].apply(lambda x: x.get('segment', 'Unknown'))
     df['category'] = df['sessionTags'].apply(lambda x: x.get('category', 'Unknown'))
     
-    
-    # Apply filters
-    filtered_df = df[
-        (df['startTime'].dt.date >= date_range[0]) &
-        (df['startTime'].dt.date <= date_range[1]) &
-        (df['device'].isin(devices)) &
-        (df['session_type'].isin(session_types))
-    ]
+
 
     # Sidebar filters
     st.sidebar.header("Filters")
@@ -74,7 +67,7 @@ try:
         "Date Range",
         value=(df['startTime'].min().date(), df['startTime'].max().date())
     )
-    
+
     # Device filter
     devices = st.sidebar.multiselect(
         "Device Type",
@@ -88,6 +81,15 @@ try:
         options=df['session_type'].unique(),
         default=df['session_type'].unique()
     )
+
+    # Apply filters
+    filtered_df = df[
+        (df['startTime'].dt.date >= date_range[0]) &
+        (df['startTime'].dt.date <= date_range[1]) &
+        (df['device'].isin(devices)) &
+        (df['session_type'].isin(session_types))
+    ]
+    
 
     # Download button
     st.sidebar.markdown('---')

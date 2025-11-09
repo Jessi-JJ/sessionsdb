@@ -214,19 +214,6 @@ try:
         title="Top Categories by Revenue"
     )
     st.plotly_chart(fig6, use_container_width=True)
-
-    with st.expander("View Session Details"):
-        # Select columns to display
-        display_columns = [
-        'sessionId', 'userId', 'location', 'device', 'browser',
-        'source', 'session_type', 'revenue', 'pageViews', 'duration', 'startTime'
-        ]
-    
-        st.dataframe(
-        filtered_df[display_columns].sort_values('startTime', ascending=False),
-        use_container_width=True,
-        hide_index=True
-        )
     
 
 except Exception as e:

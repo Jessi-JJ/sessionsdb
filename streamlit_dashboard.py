@@ -79,6 +79,16 @@ try:
         options=df['session_type'].unique(),
         default=df['session_type'].unique()
     )
+
+    # Download button
+    st.sidebar.markdown('---')
+    csv = filtered_df.to_csv(index=False)
+    st.sidebar.download_button(
+        label="Download Filtered Data as CSV",
+        data=csv,
+        file_name="session_data.csv",
+        mime="text/csv"
+    )
     
     # Apply filters
     filtered_df = df[
@@ -171,21 +181,6 @@ try:
     )
     st.plotly_chart(fig5, use_container_width=True)
     
-    # Data Table
-    st.subheader("Session Details")
-    
-    # Select columns to display
-    display_columns = [
-        'sessionId', 'userId', 'location', 'device', 'browser',
-        'source', 'session_type', 'revenue', 'pageViews', 'duration', 'startTime'
-    ]
-    
-    st.dataframe(
-        filtered_df[display_columns].sort_values('startTime', ascending=False),
-        use_container_width=True,
-        hide_index=True
-    )
-    
     # Advanced Analytics Section
     st.markdown("---")
     st.subheader("Advanced Analytics")
@@ -216,16 +211,20 @@ try:
         title="Top Categories by Revenue"
     )
     st.plotly_chart(fig6, use_container_width=True)
+
+    with st.expander("View Session Details"):
+        # Select columns to display
+        display_columns = [
+        'sessionId', 'userId', 'location', 'device', 'browser',
+        'source', 'session_type', 'revenue', 'pageViews', 'duration', 'startTime'
+        ]
     
-    # Download data
-    st.markdown("---")
-    csv = filtered_df.to_csv(index=False)
-    st.download_button(
-        label="Download Filtered Data as CSV",
-        data=csv,
-        file_name="session_data.csv",
-        mime="text/csv"
-    )
+        st.dataframe(
+        filtered_df[display_columns].sort_values('startTime', ascending=False),
+        use_container_width=True,
+        hide_index=True
+        )
+    
 
 except Exception as e:
     st.error(f"Error connecting to database: {str(e)}")

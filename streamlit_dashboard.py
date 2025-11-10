@@ -50,7 +50,7 @@ try:
     df['device'] = df['deviceInfo'].apply(lambda x: x.get('device', 'Unknown'))
     df['browser'] = df['deviceInfo'].apply(lambda x: x.get('browser', 'Unknown'))
     df['source'] = df['sessionMetadata'].apply(lambda x: x.get('source', 'Unknown'))
-    df['revenue'] = df['sessionMetadata'].apply(lambda x: x.get('revenue', 0))
+    df['sales'] = df['sessionMetadata'].apply(lambda x: x.get('sales', 0))
     df['pageViews'] = df['sessionMetadata'].apply(lambda x: x.get('pageViews', 0))
     df['duration'] = df['sessionMetadata'].apply(lambda x: x.get('duration', 0))
     df['session_type'] = df['sessionTags'].apply(lambda x: x.get('type', 'Unknown'))
@@ -108,8 +108,8 @@ try:
         st.metric("Total Sessions", len(filtered_df))
     
     with col2:
-        total_revenue = filtered_df['revenue'].sum()
-        st.metric("Total Revenue", f"${total_revenue:,.2f}")
+        total_sales = filtered_df['sales'].sum()
+        st.metric("Total Sales", f"${total_sales:,.2f}")
     
     with col3:
         avg_duration = filtered_df['duration'].mean() / 60  # Convert to minutes
@@ -153,13 +153,13 @@ try:
     col1, col2 = st.columns(2)
     
     with col1:
-        st.subheader("Revenue by Traffic Source")
-        revenue_by_source = filtered_df.groupby('source')['revenue'].sum().sort_values(ascending=False)
+        st.subheader("Sales by Traffic Source")
+        sales_by_source = filtered_df.groupby('source')['sales'].sum().sort_values(ascending=False)
         fig3 = px.bar(
-            x=revenue_by_source.index,
-            y=revenue_by_source.values,
-            labels={'x': 'Source', 'y': 'Revenue ($)'},
-            title="Revenue by Source"
+            x=sales_by_source.index,
+            y=sales_by_source.values,
+            labels={'x': 'Source', 'y': 'Sales ($)'},
+            title="Sales by Source"
         )
         st.plotly_chart(fig3, use_container_width=True)
     
@@ -197,21 +197,21 @@ try:
         )
     
     with col2:
-        avg_revenue_per_session = filtered_df['revenue'].mean()
-        st.metric("Avg Revenue/Session", f"${avg_revenue_per_session:.2f}")
+        avg_sales_per_session = filtered_df['sales'].mean()
+        st.metric("Avg Sales/Session", f"${avg_sales_per_session:.2f}")
     
     with col3:
         bounce_rate = (filtered_df['session_type'] == 'bounced').sum() / len(filtered_df) * 100
         st.metric("Bounce Rate", f"{bounce_rate:.1f}%")
     
-    # Revenue by Category
-    st.subheader("Revenue by Product Category")
-    revenue_by_category = filtered_df.groupby('category')['revenue'].sum().sort_values(ascending=False)
+    # Sales by Category
+    st.subheader("Sales by Product Category")
+    sales_by_category = filtered_df.groupby('category')['sales'].sum().sort_values(ascending=False)
     fig6 = px.bar(
-        x=revenue_by_category.index,
-        y=revenue_by_category.values,
-        labels={'x': 'Category', 'y': 'Revenue ($)'},
-        title="Top Categories by Revenue"
+        x=sales_by_category.index,
+        y=sales_by_category.values,
+        labels={'x': 'Category', 'y': 'Sales ($)'},
+        title="Top Categories by Sales"
     )
     st.plotly_chart(fig6, use_container_width=True)
     
